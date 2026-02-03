@@ -1,10 +1,10 @@
 from typing import Literal
 
-from card.enum import Black, Rank, Red, Suit
+from card.enum import Black, Color, Rank, Red, Suit
 from card.joker import Joker
 from card.standard_card import StandardCard
 
-type Card = StandardCard | Joker
+type Card = StandardCard[Rank, Suit] | Joker[Color]
 
 type NumberCard[S: Suit] = StandardCard[
     Literal[

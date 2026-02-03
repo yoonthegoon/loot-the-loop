@@ -2,15 +2,16 @@ from random import Random
 from typing import Literal
 
 from card import ndo
-from loot_the_loop.alias import Notes, ScorePile, Temple, Trinket
+from loot_the_loop.alias import Notes, ScorePile, Temple
 from loot_the_loop.enum import Action, State
 from loot_the_loop.exceptions import IllegalActionError
 from loot_the_loop.util import is_exit, is_jewel, is_trap, is_trinket
 
 
-class Game:
+class CoreGame:
     def __init__(self, random: Random = Random()) -> None:
-        temple: Temple = ndo(face_up=False)[1:]
+        temple: Temple = ndo(face_up=False)
+        temple.pop(1)  # remove black joker
         random.shuffle(temple)
         self._temple: Temple = temple
         self._notes: Notes = []
@@ -32,6 +33,10 @@ class Game:
     @property
     def state(self) -> State:
         return self._state
+
+    @property
+    def jewels(self) -> int:
+        return len(list(filter(is_jewel, self.score_pile)))
 
     @property
     def legal_actions(self) -> list[Action]:
@@ -76,7 +81,7 @@ class Game:
             raise IllegalActionError(
                 "explore can only be performed if either or both of the top two cards in the deck are face-up number cards (trinkets)"
             )
-        value: Trinket = card.rank.value  # ty: ignore[possibly-missing-attribute]
+        value = card.rank.value  # ty: ignore[possibly-missing-attribute]
         self._temple = self.temple[value:] + self.temple[:value]
         top_card = self.temple[0]
         if top_card.face_up:
@@ -84,9 +89,7 @@ class Game:
                 self._score_pile.append(self.temple.pop(0))
             elif is_trap(top_card):
                 self._state = State.LOST
-            elif (
-                is_exit(top_card) and len(list(filter(is_jewel, self.score_pile))) == 4
-            ):
+            elif is_exit(top_card) and self.jewels == 4:
                 self._state = State.WON
 
     def mark_a_path(self) -> None:
