@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import Self
 
 from card.enum import Color
 
@@ -16,6 +15,5 @@ class BaseCard(ABC):
     def face_up(self) -> bool:
         return self._face_up
 
-    def flip(self) -> Self:
+    def flip(self) -> None:
         self._face_up = not self._face_up
-        return self

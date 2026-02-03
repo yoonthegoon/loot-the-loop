@@ -20,6 +20,14 @@ class StandardCard[R: Rank, S: Suit](BaseCard):
             return chr(0x1F0A0)
         return chr(0x1F090 + 0x10 * self.suit.value + self.rank.value)
 
+    @property
+    def rank(self) -> R:
+        return self._rank
+
+    @property
+    def suit(self) -> S:
+        return self._suit
+
     @overload
     def color(
         self: "StandardCard[Rank, Literal[Suit.SPADES]]",
@@ -53,11 +61,3 @@ class StandardCard[R: Rank, S: Suit](BaseCard):
                 return Color.RED
             case Suit.SPADES | Suit.CLUBS:
                 return Color.BLACK
-
-    @property
-    def rank(self) -> R:
-        return self._rank
-
-    @property
-    def suit(self) -> S:
-        return self._suit

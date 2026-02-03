@@ -30,18 +30,5 @@ class Suit(Enum):
     CLUBS = auto()
 
 
-Number = Literal[
-    Rank.TWO,
-    Rank.THREE,
-    Rank.FOUR,
-    Rank.FIVE,
-    Rank.SIX,
-    Rank.SEVEN,
-    Rank.EIGHT,
-    Rank.NINE,
-    Rank.TEN,
-]
-Face = Literal[Rank.JACK, Rank.QUEEN, Rank.KING]
-
 Red = Literal[Suit.HEARTS, Suit.DIAMONDS]
 Black = Literal[Suit.SPADES, Suit.CLUBS]
